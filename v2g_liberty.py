@@ -8,6 +8,7 @@ from itertools import accumulate
 from typing import AsyncGenerator, List, Optional
 import constants as c
 from v2g_globals import V2GLibertyGlobals
+from options import get_options
 
 import appdaemon.plugins.hass.hassapi as hass
 
@@ -63,6 +64,8 @@ class V2Gliberty(hass.Hass, WallboxModbusMixin):
     def initialize(self):
         self.log("Initializing V2Gliberty")
 
+        self.options = get_options()
+
         self.MIN_RESOLUTION = timedelta(minutes=c.FM_EVENT_RESOLUTION_IN_MINUTES)
         self.CAR_AVERAGE_WH_PER_KM = int(float(self.args["car_average_wh_per_km"]))
 
@@ -74,7 +77,7 @@ class V2Gliberty(hass.Hass, WallboxModbusMixin):
         self.set_value("input_text.optimisation_mode", c.OPTIMISATION_MODE)
         self.set_value("input_text.utility_display_name", c.UTILITY_CONTEXT_DISPLAY_NAME)
 
-        self.ADMIN_MOBILE_NAME = self.args["admin_mobile_name"].lower()
+        self.ADMIN_MOBILE_NAME = self.options["admin_mobile_name"].lower()
         self.PRIORITY_NOTIFICATION_CONFIG = {}
         self.recipients = []
         self.init_notification_configuration()
@@ -171,7 +174,7 @@ class V2Gliberty(hass.Hass, WallboxModbusMixin):
             self.ADMIN_MOBILE_NAME = self.recipients[0]
         else:
             # Only check platform config if admin mobile name is valid.
-            platform = self.args["admin_mobile_platform"].lower()
+            platform = self.config["admin_mobile_platform"].lower()
             if platform == "ios":
                 self.PRIORITY_NOTIFICATION_CONFIG = {
                     "push": {"sound": {"critical": 1, "name": "default", "volume": 0.9}}}
