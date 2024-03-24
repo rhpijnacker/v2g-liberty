@@ -7,6 +7,7 @@ import requests
 import isodate
 import constants as c
 from v2g_globals import time_round
+from options import get_options
 
 import appdaemon.plugins.hass.hassapi as hass
 
@@ -54,6 +55,8 @@ class FlexMeasuresClient(hass.Hass):
     def initialize(self):
         self.log("Initializing FlexMeasuresClient")
 
+        self.options = get_options()
+
         self.fm_token = ""
         self.fm_busy_getting_schedule = False
         self.log(f"Init, fm_busy_getting_schedule: {self.fm_busy_getting_schedule}.")
@@ -63,8 +66,8 @@ class FlexMeasuresClient(hass.Hass):
         self.FM_URL = base_url + c.FM_SCHEDULE_SLUG
         self.FM_TIGGER_URL = base_url + c.FM_SCHEDULE_TRIGGER_SLUG
         self.FM_SCHEDULE_DURATION = self.args["fm_schedule_duration"]
-        self.FM_USER_EMAIL = self.args["fm_user_email"]
-        self.FM_USER_PASSWORD = self.args["fm_user_password"]
+        self.FM_USER_EMAIL = self.options["fm_user_email"]
+        self.FM_USER_PASSWORD = self.options["fm_user_password"]
         self.DELAY_FOR_REATTEMPTS = int(self.args["delay_for_reattempts_to_retrieve_schedule"])
         self.MAX_NUMBER_OF_REATTEMPTS = int(self.args["max_number_of_reattempts_to_retrieve_schedule"])
         self.DELAY_FOR_INITIAL_ATTEMPT = int(self.args["delay_for_initial_attempt_to_retrieve_schedule"])

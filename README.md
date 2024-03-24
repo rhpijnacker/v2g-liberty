@@ -188,19 +188,9 @@ ha_longitude: x.xxxxxxx
 ha_elevation: x
 ha_time_zone: Europe/Amsterdam
 
-# To which mobile device must (critical) platform notifications be sent.
-# Can be found in the home assistant companion app under:
-# Settings > Companion App > (Top item) your name and server > Device name
-# Replace any spaces, minus (-), dots(.) with underscores (_)
-admin_mobile_name: "your_device_name"
-# Should be iOS or Android, others are not supported.
-admin_mobile_platform: "your platform name: iOS or Android"
-
 #############   FLEXMEASURES CONFIGURATION   ###################################
 
 ## ALWAYS CHANGE ##
-fm_user_email: "your FM e-mail here (use quotes)"
-fm_user_password: "your FM password here (use quotes)"
 
 fm_account_power_sensor_id: XX
 fm_account_availability_sensor_id: XX
@@ -473,8 +463,6 @@ flexmeasures-client:
   dependencies:
     - v2g-globals
 
-  fm_user_email: !secret fm_user_email
-  fm_user_password: !secret fm_user_password
   fm_schedule_duration: !secret fm_schedule_duration
 
   reschedule_on_soc_changes_only: false # Whether to skip requesting a new schedule when the SOC has been updated, but hasn't changed
@@ -498,8 +486,6 @@ get_fm_data:
   module: get_fm_data
   class: FlexMeasuresDataImporter
   priority: 100
-  fm_data_user_email: !secret fm_user_email
-  fm_data_user_password: !secret fm_user_password
   VAT: !secret VAT
   markup_per_kwh: !secret markup_per_kwh
 
@@ -510,9 +496,6 @@ set_fm_data:
   dependencies:
     - wallbox-client
     - v2g-globals
-
-  fm_data_user_email: !secret fm_user_email
-  fm_data_user_password: !secret fm_user_password
 
   fm_base_entity_address_power: !secret fm_base_entity_address_power
   fm_base_entity_address_availability: !secret fm_base_entity_address_availability
