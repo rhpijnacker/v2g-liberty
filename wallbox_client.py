@@ -3,8 +3,10 @@ import adbase as ad
 import time
 import constants as c
 import appdaemon.plugins.hass.hassapi as hass
+import json
 
 from pyModbusTCP.client import ModbusClient
+from config import get_config
 
 
 class WallboxModbusMixin:
@@ -31,8 +33,9 @@ class WallboxModbusMixin:
 
         self.last_restart = self.get_now()
 
-        host = self.args["wallbox_host"]
-        port = self.args["wallbox_port"]
+        data = get_config()
+        host = data["wallbox_host"]
+        port = data["wallbox_port"]
         self.log(f"Configuring Modbus client at {host}:{port}")
         client = ModbusClient(
             host       = host,
